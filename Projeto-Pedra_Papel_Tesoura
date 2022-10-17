@@ -1,0 +1,91 @@
+from tkinter import *
+from tkinter import ttk
+from PIL import Image, ImageTk
+
+# cores --------------------------------
+co0 = "#FFFFFF"  # white / branca
+co1 = "#333333"  # black / preta
+co2 = "#fcc058"  # orange / laranja
+co3 = "#fff873"  # yellow / amarela
+co4 = "#34eb3d"   # green / verde
+co5 = "#e85151"   # red / vermelha
+background_color = "#3b3b3b"
+
+# config janela
+janela = Tk()
+janela.title('Jokenpô')
+janela.geometry('260x280')
+janela.configure(bg = background_color)
+janela.resizable(width=False, height=False)
+
+# frames/ divisão da janela
+frame1 = Frame(janela, width=260, height=100, bg=co1, relief='raised')
+frame1.grid(row=0, column= 0, sticky=NW)
+
+frame2 = Frame(janela, width=260, height=280, bg=co0, relief='flat')
+frame2.grid(row=1, column=0, sticky=NW)
+
+estilo = ttk.Style(janela)
+estilo.theme_use('clam')
+
+# configurando frame1
+player = Label(frame1, text='Você', anchor=CENTER, font='Arial 10 bold', bg=co1, fg=co0)
+player.place(x=50, y=70)
+
+# jogador
+player_linha = Label(frame1, height=10, anchor=CENTER, font='Arial 10 bold', bg=co0, fg=co0)
+player_linha.place(x=0, y=0)
+
+player_pontos= Label(frame1, text='0', anchor=CENTER, font='Arial 30 bold', bg=co1, fg=co0)
+player_pontos.place(x=55, y=20)
+
+# separador de pontos
+separador_pontos= Label(frame1, text=':', anchor=CENTER, font='Arial 30 bold', bg=co1, fg=co0)
+separador_pontos.place(x=120, y=20)
+
+# linha de empate
+linha_empate= Label(frame1, width=255, anchor=CENTER, font='Arial 10 bold', bg=co0, fg=co0)
+linha_empate.place(x=0, y=95)
+
+# pc
+pc = Label(frame1, text='PC', anchor=CENTER, font='Arial 10 bold', bg=co1, fg=co0)
+pc.place(x=175, y=70)
+
+pc_pontos= Label(frame1, text='0', anchor=CENTER, font='Arial 30 bold', bg=co1, fg=co0)
+pc_pontos.place(x=173, y=20)
+
+pc_linha = Label(frame1, height=10, anchor=CENTER, font='Arial 10 bold', bg=co0, fg=co0)
+pc_linha.place(x=255, y=0)
+
+
+# configurando frame2
+#importando icons
+icon_pedra = Image.open('icons/pedra.png')
+icon_papel = Image.open('icons/papel.png')
+icon_tesoura = Image.open('icons/tesoura.png')
+
+# abrindo imagem para usar no tkinter
+icon_pedra = ImageTk.PhotoImage(icon_pedra)
+icon_papel = ImageTk.PhotoImage(icon_papel)
+icon_tesoura = ImageTk.PhotoImage(icon_tesoura)
+
+# criando botoes
+botao_pedra = Button(frame2, width=50, image=icon_pedra, compound=CENTER, bg=co0, font='Arial 10 bold', anchor=CENTER, relief=FLAT)
+botao_pedra.place(x=15, y=40)
+
+botao_papel = Button(frame2, width=50, image=icon_papel, compound=CENTER, bg=co0, font='Arial 10 bold', anchor=CENTER, relief=FLAT)
+botao_papel.place(x=100, y=40)
+
+botao_tesoura = Button(frame2, width=50, image=icon_tesoura, compound=CENTER, bg=co0, font='Arial 10 bold', anchor=CENTER, relief=FLAT)
+botao_tesoura.place(x=185, y=40)
+
+botao_jogar = Button(frame2, width=30, text='Jogar', bg=background_color, fg=co0, font='Arial 10 bold', anchor=CENTER, relief=RAISED, overrelief=RIDGE)
+botao_jogar.place(x=5, y=140)
+
+
+
+
+
+
+
+janela.mainloop()
