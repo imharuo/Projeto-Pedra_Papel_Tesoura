@@ -1,14 +1,16 @@
+from asyncio import events
 from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
+import random
 
 # cores --------------------------------
 co0 = "#FFFFFF"  # white / branca
 co1 = "#333333"  # black / preta
 co2 = "#fcc058"  # orange / laranja
-co3 = "#fff873"  # yellow / amarela
-co4 = "#34eb3d"   # green / verde
-co5 = "#e85151"   # red / vermelha
+amarelo = "#fff873"  # yellow / amarela
+verde = "#34eb3d"   # green / verde
+vermelho = "#e85151"   # red / vermelha
 background_color = "#3b3b3b"
 
 # config janela
@@ -43,10 +45,6 @@ player_pontos.place(x=55, y=20)
 separador_pontos= Label(frame1, text=':', anchor=CENTER, font='Arial 30 bold', bg=co1, fg=co0)
 separador_pontos.place(x=120, y=20)
 
-# linha de empate
-linha_empate= Label(frame1, width=255, anchor=CENTER, font='Arial 10 bold', bg=co0, fg=co0)
-linha_empate.place(x=0, y=95)
-
 # pc
 pc = Label(frame1, text='PC', anchor=CENTER, font='Arial 10 bold', bg=co1, fg=co0)
 pc.place(x=175, y=70)
@@ -57,35 +55,206 @@ pc_pontos.place(x=173, y=20)
 pc_linha = Label(frame1, height=10, anchor=CENTER, font='Arial 10 bold', bg=co0, fg=co0)
 pc_linha.place(x=255, y=0)
 
+# linha de empate
+linha_empate= Label(frame1, width=300, anchor=CENTER, font='Arial 10 bold', bg=co0, fg=co0)
+linha_empate.place(x=0, y=95)
 
-# configurando frame2
-#importando icons
-icon_pedra = Image.open('icons/pedra.png')
-icon_papel = Image.open('icons/papel.png')
-icon_tesoura = Image.open('icons/tesoura.png')
+# print de escolhas do jokenpo
+print_opcao_pc = Label(frame2, text='', height=1, anchor=CENTER, font='Arial 10 bold', bg=co0, fg=co0)
+print_opcao_pc.place(x=161, y=0)
 
-# abrindo imagem para usar no tkinter
-icon_pedra = ImageTk.PhotoImage(icon_pedra)
-icon_papel = ImageTk.PhotoImage(icon_papel)
-icon_tesoura = ImageTk.PhotoImage(icon_tesoura)
+print_opcao_voce = Label(frame2, text='', height=1, anchor=CENTER, font='Arial 10 bold', bg=co0, fg=co0)
+print_opcao_voce.place(x=42, y=0)
 
-# criando botoes
-botao_pedra = Button(frame2, width=50, image=icon_pedra, compound=CENTER, bg=co0, font='Arial 10 bold', anchor=CENTER, relief=FLAT)
-botao_pedra.place(x=15, y=40)
+global voce
+global computador
+global rounds
+global pontos_voce
+global pontos_pc
 
-botao_papel = Button(frame2, width=50, image=icon_papel, compound=CENTER, bg=co0, font='Arial 10 bold', anchor=CENTER, relief=FLAT)
-botao_papel.place(x=100, y=40)
+pontos_voce = 0
+pontos_pc = 0
+rounds = 9
 
-botao_tesoura = Button(frame2, width=50, image=icon_tesoura, compound=CENTER, bg=co0, font='Arial 10 bold', anchor=CENTER, relief=FLAT)
-botao_tesoura.place(x=185, y=40)
+# funcao logica jogo
+def jogar(i):
+    global rounds
+    global pontos_voce
+    global pontos_pc
 
-botao_jogar = Button(frame2, width=30, text='Jogar', bg=background_color, fg=co0, font='Arial 10 bold', anchor=CENTER, relief=RAISED, overrelief=RIDGE)
+    if rounds > 0:
+        print(rounds)
+        opcoes = ['Pedra', 'Papel', 'Tesoura']
+        computador = random.choice(opcoes)
+        voce = i
+
+        print_opcao_pc['text'] = computador
+        print_opcao_pc['fg'] = co1
+
+        print_opcao_voce['text'] = voce
+        print_opcao_voce['fg'] = co1
+
+        if voce == 'Pedra' and computador == 'Pedra':
+            print('Empate')
+            linha_empate['bg'] = amarelo
+            player_linha['bg'] = co0
+            pc_linha['bg'] = co0
+
+        elif voce == 'Papel' and computador == 'Papel':
+            print('Empate')
+            linha_empate['bg'] = amarelo
+            player_linha['bg'] = co0
+            pc_linha['bg'] = co0
+
+        elif voce == 'Tesoura' and computador == 'Tesoura':
+            print('Empate')
+            linha_empate['bg'] = amarelo
+            player_linha['bg'] = co0
+            pc_linha['bg'] = co0
+
+        elif voce == 'Pedra' and computador == 'Papel':
+            print('PC ganhou')
+            linha_empate['bg'] = co0
+            player_linha['bg'] = vermelho
+            pc_linha['bg'] = verde
+
+            pontos_pc += 1
+            rounds -= 1
+
+        elif voce == 'Pedra' and computador == 'Tesoura':
+            print('Você ganhou')
+            linha_empate['bg'] = co0
+            player_linha['bg'] = verde
+            pc_linha['bg'] = vermelho
+
+            pontos_voce += 1
+            rounds -= 1
+
+        elif voce == 'Papel' and computador == 'Tesoura':
+            print('PC ganhou')
+            linha_empate['bg'] = co0
+            player_linha['bg'] = vermelho
+            pc_linha['bg'] = verde
+
+            pontos_pc += 1
+            rounds -= 1
+
+        elif voce == 'Papel' and computador == 'Pedra':
+            print('Você ganhou')
+            linha_empate['bg'] = co0
+            player_linha['bg'] = verde
+            pc_linha['bg'] = vermelho
+            
+            pontos_voce += 1
+            rounds -= 1
+
+        elif voce == 'Tesoura' and computador == 'Papel':
+            print('Você ganhou')
+            linha_empate['bg'] = co0
+            player_linha['bg'] = verde
+            pc_linha['bg'] = vermelho
+            
+            pontos_voce += 1
+            rounds -= 1
+
+        elif voce == 'Tesoura' and computador == 'Pedra':
+            print('PC ganhou')
+            linha_empate['bg'] = co0
+            player_linha['bg'] = verde
+            pc_linha['bg'] = vermelho
+
+            pontos_pc += 1
+            rounds -= 1
+
+        # att pontuação
+        player_pontos['text'] = pontos_voce
+        pc_pontos['text'] = pontos_pc
+
+    else:
+        player_pontos['text'] = pontos_voce
+        pc_pontos['text'] = pontos_pc
+
+        fim_de_jogo()
+
+# funcao inicia jogo
+def inicia_jogo():
+    # importando icons
+    # configurando frame2
+
+    global icon_papel
+    global icon_pedra
+    global icon_tesoura
+    global botao_papel
+    global botao_pedra
+    global botao_tesoura
+
+    botao_jogar.destroy()
+
+    icon_pedra = Image.open('icons/pedra.png')
+    icon_papel = Image.open('icons/papel.png')
+    icon_tesoura = Image.open('icons/tesoura.png')
+
+    # abrindo imagem para usar no tkinter
+    icon_pedra = ImageTk.PhotoImage(icon_pedra)
+    icon_papel = ImageTk.PhotoImage(icon_papel)
+    icon_tesoura = ImageTk.PhotoImage(icon_tesoura)
+
+    # criando botoes
+    botao_pedra = Button(frame2, command=lambda: jogar('Pedra'), width=50, image=icon_pedra, compound=CENTER, bg=co0, font='Arial 10 bold', anchor=CENTER, relief=FLAT)
+    botao_pedra.place(x=15, y=60)
+
+    botao_papel = Button(frame2, command=lambda: jogar('Papel'), width=50, image=icon_papel, compound=CENTER, bg=co0, font='Arial 10 bold', anchor=CENTER, relief=FLAT)
+    botao_papel.place(x=97, y=60)
+
+    botao_tesoura = Button(frame2, command=lambda: jogar('Tesoura'), width=50, image=icon_tesoura, compound=CENTER, bg=co0, font='Arial 10 bold', anchor=CENTER, relief=FLAT)
+    botao_tesoura.place(x=185, y=60)
+
+# funcao terminar jogo
+def fim_de_jogo():
+    global rounds
+    global pontos_voce
+    global pontos_pc
+
+    # destruindo os botoes
+    botao_jogar.destroy()
+    botao_papel.destroy()
+    botao_pedra.destroy()
+    botao_tesoura.destroy()
+
+    # definindo vencedor
+    if pontos_voce > pontos_pc:
+        vencedor = Label(frame2, text='Parabéns! Você ganhou\nAmassou', anchor=CENTER, font='Arial 10 bold', bg=co0, fg=verde)
+        vencedor.place(x=43, y=70)
+    elif pontos_pc > pontos_voce:
+        vencedor = Label(frame2, text='Infelizmente você perdeu.\nNT', anchor=CENTER, font='Arial 10 bold', bg=co0, fg=vermelho)
+        vencedor.place(x=45, y=70)
+    else:
+        vencedor = Label(frame2, text='Empate! Kekw', anchor=CENTER, font='Arial 10 bold', bg=co0, fg=co1)
+        vencedor.place(x=75, y=75)
+
+    # reiniciando as variaveis
+    pontos_pc = 0
+    pontos_voce = 0
+    rounds = 9
+
+    # jogar novamente
+    def jogar_de_novo():
+        player_pontos['text'] = '0'
+        pc_pontos['text'] = '0'
+
+        vencedor.destroy()
+
+        inicia_jogo()
+
+        botao_jogar_novamente.destroy()
+
+
+    botao_jogar_novamente = Button(frame2, command=jogar_de_novo, width=30, text='Jogar de novo', bg=background_color, fg=co0, font='Arial 10 bold', anchor=CENTER, relief=RAISED, overrelief=RIDGE)
+    botao_jogar_novamente.place(x=5, y=140)
+
+
+# botao para inicar jogo
+botao_jogar = Button(frame2, command=inicia_jogo, width=30, text='Jogar', bg=background_color, fg=co0, font='Arial 10 bold', anchor=CENTER, relief=RAISED, overrelief=RIDGE)
 botao_jogar.place(x=5, y=140)
-
-
-
-
-
-
 
 janela.mainloop()
